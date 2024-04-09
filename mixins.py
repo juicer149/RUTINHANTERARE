@@ -130,7 +130,7 @@ class GetInputMixin:
         while True:
             try:
                 if godkända_svar:
-                    svar = input(f"\n{fråga} [{', '.join(godkända_svar)}]: ").lower().strip().replace('.', '')
+                    svar = input(f"{fråga} [{', '.join(godkända_svar)}]: ").lower().strip().replace('.', '')
                     if svar in godkända_svar:
                         return svar
                     else:

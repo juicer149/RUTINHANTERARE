@@ -19,7 +19,7 @@ def print_and_update_score(dekorera_funktion: Callable[..., float]) -> Callable[
         resultat = dekorera_funktion(instans, *args, **kwargs)
         avrundat_resultat = round(resultat, 2)
         instans.amor_fati.lägg_till_poäng(avrundat_resultat)
-        print(f"\n\tDetta gav dig: {avrundat_resultat} poäng.")
-        print(f"\n\tDitt nya totala värde: {instans.amor_fati}")
+        #print(f"\n\tDetta gav dig: {avrundat_resultat} poäng.")
+        print(f"\tDitt nya totala värde: {instans.amor_fati}")
         return avrundat_resultat
     return wrapper

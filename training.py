@@ -26,10 +26,11 @@ class TrainingHandler(GetUnitsInputMixin, CalculateDeclineMixin):
             'yoga': (30, 0.5, 0.9),            
             'löpning': (30, 1, 0.95), # ev göra en specialare för kondition (UTVECKLING)
             # '': (), Lägg till fler aktiviteter med detaljer här...
+            'run': (30, 1, 0.95),
         }
         
         self.TRÄNINGS_METOD_DICT = {
-           'kondition': ('löpning', 'rodd', 'skierg', 'assault bike', 'cykel'), 
+           'kondition': ('löpning', 'run', 'rodd', 'skierg', 'assault bike', 'cykel'),
            'styrka': ('hypotrofi', 'funktionell', 'kroppsvikt', 'maxstyrka', 'explosivitet', 'ytterläge'), 
            'mobilitet': ('stretching', 'kinstretch'),	
            'aktivitet': ('klättring', 'bjj', 'racket', 'golf', 'yoga')
@@ -47,7 +48,7 @@ class TrainingHandler(GetUnitsInputMixin, CalculateDeclineMixin):
         while True:
             godkända_svar = self.TRÄNINGS_METOD_DICT.keys()
             träningsval = self.get_input('Vilken form av träning', godkända_svar)
-
+#Behöver lägga in ett alternativ för avbryt som tar en tillbaka om man svarar fel.
             while True:
                 specifik_träning = self.get_input(f"Vilken typ av {träningsval}?", godkända_svar=self.TRÄNINGS_METOD_DICT[träningsval])
                 måttenhet = "set" if träningsval == "styrka" else "minuter"
@@ -55,12 +56,13 @@ class TrainingHandler(GetUnitsInputMixin, CalculateDeclineMixin):
                 while True:
                     try:
                         enheter = self.get_units(f"Hur många {måttenhet} utförde du för {specifik_träning}?: ")
-                        poäng = self.calculate(specifik_träning, enheter)
+                        score = self.calculate(specifik_träning, enheter)
+                        print(f"\n{enheter}-{måttenhet} av {specifik_träning} gav dig: {score}-poäng.")
                         break                  
                     except ValueError:
                         print(f"Ange konkreta siffror.")
-                        
-                mer_träning_samma_metod = self.get_input(f"Gjorde du någon mer {specifik_träning}?: ", godkända_svar=['ja', 'nej']) 
+
+                mer_träning_samma_metod = self.get_input(f"Gjorde du någon mer {träningsval}?: ", godkända_svar=['ja', 'nej'])
                 if mer_träning_samma_metod == 'nej':
                     break
                     
@@ -70,7 +72,7 @@ class TrainingHandler(GetUnitsInputMixin, CalculateDeclineMixin):
 
     def run(self):
         """Startar programmet och hanterar användarflödet från början till slut i träning."""
-        har_tränat = self.get_input(f"Har du tränat idag", godkända_svar=['ja', 'nej'])
+        har_tränat = self.get_input(f"\nHar du tränat idag", godkända_svar=['ja', 'nej'])
         if har_tränat == 'ja':
             self.handle_training()
         else:
